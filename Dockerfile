@@ -12,6 +12,8 @@ RUN curl -s https://go.googlecode.com/files/go1.2.linux-amd64.tar.gz | tar -v -C
 ENV	PATH	/usr/local/go/bin:$PATH
 ENV	GOPATH	/go:/go/src/github.com/blake-education/dogestry/vendor/go
 ADD . /go/src/github.com/blake-education/dogestry
+RUN mkdir /go/src/github.com/fsouza
+RUN git clone -b 0.2.1 https://github.com/fsouza/go-dockerclient.git /go/src/github.com/fsouza/go-dockerclient
 
 RUN cd /go/src/github.com/blake-education/dogestry && \
     go get && \
