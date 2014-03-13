@@ -401,7 +401,7 @@ func (remote *S3Remote) putFile(src string, key *keyDef) error {
     return err
   }
 
-  err = remote.getBucket().PutReader(dstKey, progressReader, finfo.Size(), "application/octet-stream", s3.Private)
+  err = remote.getBucket().PutReader(dstKey, compressorReader, finfo.Size(), "application/octet-stream", s3.Private)
   if err != nil {
     return err
   }
