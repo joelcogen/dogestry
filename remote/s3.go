@@ -43,17 +43,17 @@ func NewS3Remote(config RemoteConfig) (*S3Remote, error) {
   url := config.Url
   prefix := strings.TrimPrefix(url.Path, "/")
 
-  //compressor,err := compressor.NewCompressor(config.Config)
-  //if err != nil {
-    //return nil,err
-  //}
+  compressor,err := compressor.NewCompressor(config.Config)
+  if err != nil {
+    return nil,err
+  }
 
   return &S3Remote{
     config: config,
     BucketName: url.Host,
     KeyPrefix:  prefix,
     client:     s3,
-    //compressor: compressor,
+    compressor: compressor,
   }, nil
 }
 
@@ -252,7 +252,7 @@ func (k keys) Get(key string, remote *S3Remote) *keyDef {
 }
 
 
-// Returns keys either not existing in other, 
+// Returns keys either not existing in other,
 // or whose sum doesn't match.
 func (k keys) NotIn(other keys) keys {
   notIn := make(keys)
@@ -396,10 +396,10 @@ func (remote *S3Remote) putFile(src string, key *keyDef) error {
   progressReader := utils.NewProgressReader(f, finfo.Size(), os.Stdout)
 
   // XXX We don't know how big the file will be ahead of time!
-  //compressorReader,err := remote.compressor.CompressReader(progressReader)
-  //if err != nil {
-    //return err
-  //}
+  compressorReader,err := remote.compressor.CompressReader(progressReader)
+  if err != nil {
+    return err
+  }
 
   err = remote.getBucket().PutReader(dstKey, progressReader, finfo.Size(), "application/octet-stream", s3.Private)
   if err != nil {
