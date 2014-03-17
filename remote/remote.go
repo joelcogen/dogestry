@@ -66,6 +66,8 @@ func NewRemote(remoteName string, config config.Config) (remote Remote, err erro
   switch remoteConfig.Kind {
   case "local":
     remote,err = NewLocalRemote(remoteConfig)
+  case "rsync":
+    remote,err = NewRsyncRemote(remoteConfig)
   case "s3":
     remote,err = NewS3Remote(remoteConfig)
   default:
