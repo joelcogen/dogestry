@@ -120,7 +120,7 @@ func (remote *LocalRemote) rsyncFrom(src, dst string) error {
 }
 
 func (remote *LocalRemote) rsync(src, dst string) error {
-  out, err := exec.Command("rsync", "-rltDhv", src, dst).CombinedOutput()
+  out, err := exec.Command("rsync", "-rlDhv", "--size-only", src, dst).CombinedOutput()
   if err != nil {
     return fmt.Errorf("rsync failed: %s\noutput: %s", err, string(out))
   }
